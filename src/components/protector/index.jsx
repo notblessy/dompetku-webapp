@@ -5,7 +5,7 @@ function Protected(props) {
   const location = useLocation();
   const [cookies] = useCookies();
 
-  if (!cookies?.access_token) {
+  if (!cookies?.accessToken) {
     return <Navigate to="/auth" state={{ from: location }} />;
   }
 

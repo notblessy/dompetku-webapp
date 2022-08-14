@@ -17,11 +17,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['dompetku']);
 
-  const [user, setUser] = useState();
-
-  const { data: res } = useSWR(() =>
-    cookies?.accessToken ? '/profile' : null
-  );
+  const { data: user } = useSWR(() => (cookies?.accessToken ? '/' : null));
 
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -33,8 +29,7 @@ export const AuthProvider = ({ children }) => {
         const { data: res } = await api.post('/login', data);
 
         if (res.token) {
-          setCookie('access_token', res.token, { path: '/' });
-          setUser(res.user);
+          setCookie('accessToken', res.token, { path: '/' });
           setTimeout(() => {
             navigate('/');
           }, 500);

@@ -53,7 +53,7 @@ export default function Auth() {
                 {...register('password')}
               />
               <div></div>
-              <Box sx={{ '& button': { m: 1 } }}>
+              <Box sx={{ '& button': { mt: 1, mb: 1 } }}>
                 <Button
                   style={{ width: '100%' }}
                   variant="contained"
@@ -68,16 +68,5 @@ export default function Auth() {
         </React.Fragment>
       </Card>
     </Box>
-    // <main style={{ padding: '1rem 0' }}>
-    //   <h2>Auth</h2>
-    //   <button
-    // onClick={() => {
-    //   console.log('clicked');
-    //   onLogin('root', 'root');
-    // }}
-    //   >
-    //     Login
-    //   </button>
-    // </main>
   );
 }
