@@ -27,17 +27,18 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       try {
         const { data: res } = await api.post('/login', data);
-
-        if (res.token) {
+        console.log(res.success);
+        if (res.token && res.success) {
+          console.log('SUBMITTTT');
           setCookie('accessToken', res.token, { path: '/' });
           setTimeout(() => {
             navigate('/');
           }, 500);
         } else {
-          toast('error', 'Gagal mencoba masuk.');
+          toast('error', res.message);
         }
       } catch (error) {
-        toast('error', 'Kesalahan pada sistem. ' + error);
+        toast('error', 'System error. ' + error);
       } finally {
         setLoading(false);
       }

@@ -42,7 +42,7 @@ export const ToastProvider = ({ children, autoHideDuration }) => {
           </IconButton>
         }
       >
-        <Alert onClose={onClose} severity={severity}>
+        <Alert onClose={onClose} severity={severity} sx={{ mb: 5 }}>
           {message}
         </Alert>
       </Snackbar>

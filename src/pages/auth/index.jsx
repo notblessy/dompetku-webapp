@@ -14,8 +14,8 @@ export default function Auth() {
   const { handleSubmit, register } = useForm();
 
   const { onLogin } = useAuth();
-
   const onSubmit = (data) => onLogin(data);
+
   return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">
