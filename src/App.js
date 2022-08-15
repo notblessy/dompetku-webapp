@@ -41,15 +41,15 @@ function App() {
           elevation={3}
           onChange={handleChange}
         >
-          <BottomNavigation value={value}>
+          <BottomNavigation value={value} sx={{ width: 500 }}>
             <BottomNavigationAction
               label="Home"
               value="home"
               icon={<HomeIcon />}
             />
             <BottomNavigationAction
-              label="Transactions"
-              value="transactions"
+              label="Transaction"
+              value="transaction"
               icon={<PaidIcon />}
             />
             <BottomNavigationAction
