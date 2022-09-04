@@ -17,56 +17,46 @@ export default function Auth() {
   const onSubmit = (data) => onLogin(data);
 
   return (
-    <Box sx={{ minWidth: 275 }}>
-      <Card variant="outlined">
-        <React.Fragment>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Login Dompetku
-            </Typography>
-            <Box
-              component="form"
-              sx={{
-                '& > :not(style)': { m: 1, width: '25ch' },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-basic"
-                label="Email"
-                name="email"
-                variant="outlined"
-                {...register('email')}
-              />
-              <div></div>
-              <TextField
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                name="password"
-                autoComplete="off"
-                {...register('password')}
-              />
-              <div></div>
-              <Box sx={{ '& button': { mt: 1, mb: 1 } }}>
-                <Button
-                  style={{ width: '100%' }}
-                  variant="contained"
-                  size="medium"
-                  onClick={handleSubmit(onSubmit)}
-                >
-                  Login
-                </Button>
-              </Box>
-            </Box>
-          </CardContent>
-        </React.Fragment>
-      </Card>
-    </Box>
+    <Card
+      variant="outlined"
+      sx={{ maxWidth: 400, margin: '30vh auto', padding: 2 }}
+    >
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        Login Dompetku
+      </Typography>
+      <Box component="form" noValidate autoComplete="off">
+        <TextField
+          sx={{ mb: 2 }}
+          id="outlined-basic"
+          label="Email"
+          fullWidth
+          name="email"
+          variant="outlined"
+          {...register('email')}
+        />
+        <div></div>
+        <TextField
+          sx={{ mb: 2 }}
+          id="outlined-password-input"
+          label="Password"
+          fullWidth
+          type="password"
+          name="password"
+          autoComplete="off"
+          {...register('password')}
+        />
+        <div></div>
+        <Box sx={{ '& button': { mt: 1, mb: 1 } }}>
+          <Button
+            style={{ width: '100%' }}
+            variant="contained"
+            size="medium"
+            onClick={handleSubmit(onSubmit)}
+          >
+            Login
+          </Button>
+        </Box>
+      </Box>
+    </Card>
   );
 }

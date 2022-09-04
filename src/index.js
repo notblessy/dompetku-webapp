@@ -7,17 +7,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './libs/contexts/auth';
 import { ToastProvider } from './libs/contexts/toast';
+import { SWRConfig } from 'swr';
+import { fetcher } from './libs/utils/api';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <CookiesProvider>
       <BrowserRouter>
-        <ToastProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </ToastProvider>
+        <SWRConfig
+          value={{
+            refreshInterval: 0,
+            fetcher,
+          }}
+        >
+          <ToastProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ToastProvider>
+        </SWRConfig>
       </BrowserRouter>
     </CookiesProvider>
   </React.StrictMode>
