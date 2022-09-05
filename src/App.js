@@ -1,6 +1,7 @@
 import './App.css';
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 import HomeIcon from '@mui/icons-material/Home';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
@@ -18,7 +19,7 @@ import { GuestOnly, Protector } from './components';
 
 import Auth from './pages/auth';
 import Profile from './pages/profile';
-import { useCookies } from 'react-cookie';
+import Wallet from './pages/wallets';
 
 function App() {
   const navigate = useNavigate();
@@ -37,9 +38,10 @@ function App() {
       <CssBaseline />
       <header className="App-header">
         {/* <Link to="/">Profile</Link> | <Link to="/auth">Auth</Link> */}
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{ px: 1 }}>
           <Routes>
             <Route element={<Protector />}>
+              <Route path="/wallets" element={<Wallet />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route element={<GuestOnly />}>
@@ -49,11 +51,16 @@ function App() {
         </Container>
         {cookies?.accessToken ? (
           <BottomNavigation
-            sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+            sx={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
             elevation={3}
             onChange={handleChange}
           >
-            <BottomNavigation value={value} sx={{ width: 500 }}>
+            <BottomNavigation value={value} sx={{ maxWidth: 370 }}>
               <BottomNavigationAction
                 label="Home"
                 value="home"
