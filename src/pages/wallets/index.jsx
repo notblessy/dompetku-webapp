@@ -8,7 +8,6 @@ import {
   ListItemButton,
   ListItemText,
   MenuItem,
-  Modal,
   Stack,
   TextField,
   Typography,
@@ -21,18 +20,7 @@ import React from 'react';
 import { Box } from '@mui/system';
 import { useForm } from 'react-hook-form';
 import { brown } from '@mui/material/colors';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  minWidth: 340,
-  bgcolor: 'white',
-  boxShadow: 24,
-  px: 3,
-  py: 2,
-};
+import { Line } from 'react-chartjs-2';
 
 const currencies = [
   {
@@ -62,6 +50,31 @@ export default function Wallet() {
 
   const [currency, setCurrency] = React.useState(1);
 
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'First dataset',
+        data: [33, 53, 85, 41, 44, 65],
+        fill: true,
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: 'rgba(75,192,192,1)',
+        tension: 0.4,
+        borderWidth: 2,
+        drawActiveElementsOnTop: false,
+      },
+      {
+        label: 'Second dataset',
+        data: [33, 25, 35, 51, 54, 76],
+        fill: false,
+        borderColor: '#742774',
+        tension: 0.4,
+        borderWidth: 2,
+        drawActiveElementsOnTop: false,
+      },
+    ],
+  };
+
   const handleChange = (event) => {
     setCurrency(event.target.value);
   };
@@ -80,6 +93,10 @@ export default function Wallet() {
         <Typography variant="h3" gutterBottom component="div">
           Wallets
         </Typography>
+      </Box>
+
+      <Box>
+        <Line data={data} />
       </Box>
 
       {wallets.data?.map((wallet) => {
