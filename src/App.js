@@ -38,7 +38,7 @@ function App() {
       <CssBaseline />
       <header className="App-header">
         {/* <Link to="/">Profile</Link> | <Link to="/auth">Auth</Link> */}
-        <Container maxWidth="sm" sx={{ px: 1 }}>
+        <Container maxWidth="xs" sx={{ px: 1 }}>
           <Routes>
             <Route element={<Protector />}>
               <Route path="/wallets" element={<Wallet />} />
@@ -56,37 +56,33 @@ function App() {
               bottom: 0,
               left: 0,
               right: 0,
+              maxWidth: 500,
+              margin: '0 auto',
             }}
             elevation={3}
             onChange={handleChange}
+            value={value}
           >
-            <BottomNavigation value={value} sx={{ maxWidth: 370 }}>
-              <BottomNavigationAction
-                label="Home"
-                value="home"
-                icon={<HomeIcon />}
-              />
-              <BottomNavigationAction
-                label="Transaction"
-                value="transaction"
-                icon={<PaidIcon />}
-              />
-              <BottomNavigationAction
-                label="Wallets"
-                value="wallets"
-                icon={<CreditCardIcon />}
-              />
-              <BottomNavigationAction
-                label="Budgets"
-                value="budgets"
-                icon={<AccountBalanceIcon />}
-              />
-              <BottomNavigationAction
-                label="Profile"
-                value="profile"
-                icon={<AccountCircleIcon />}
-              />
-            </BottomNavigation>
+            <BottomNavigationAction
+              label="Home"
+              value="home"
+              icon={<HomeIcon />}
+            />
+            <BottomNavigationAction
+              label="Wallets"
+              value="wallets"
+              icon={<CreditCardIcon />}
+            />
+            <BottomNavigationAction
+              label="Budgets"
+              value="budgets"
+              icon={<AccountBalanceIcon />}
+            />
+            <BottomNavigationAction
+              label="Profile"
+              value="profile"
+              icon={<AccountCircleIcon />}
+            />
           </BottomNavigation>
         ) : null}
       </header>

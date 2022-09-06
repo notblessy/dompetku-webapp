@@ -17,6 +17,7 @@ export const useWallet = () => {
       setLoading(true);
       try {
         const { data: res } = await api.post('/wallets', data);
+        console.log(data);
         if (res.success) {
           mutate('/wallets');
           toast('success', 'Wallet berhasil disimpan.');
