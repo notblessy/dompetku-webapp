@@ -6,7 +6,6 @@ import {
   List,
   ListItemAvatar,
   ListItemButton,
-  ListItemText,
   MenuItem,
   Stack,
   TextField,
@@ -19,8 +18,8 @@ import { useWallet } from '../../libs/hooks/wallet';
 import React from 'react';
 import { Box } from '@mui/system';
 import { useForm } from 'react-hook-form';
-import { brown } from '@mui/material/colors';
-import { Line } from 'react-chartjs-2';
+import { lightBlue } from '@mui/material/colors';
+import Chart from 'react-apexcharts';
 
 const currencies = [
   {
@@ -50,30 +49,33 @@ export default function Wallet() {
 
   const [currency, setCurrency] = React.useState(1);
 
-  const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'First dataset',
-        data: [33, 53, 85, 41, 44, 65],
-        fill: true,
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        borderColor: 'rgba(75,192,192,1)',
-        tension: 0.4,
-        borderWidth: 2,
-        drawActiveElementsOnTop: false,
+  const options = {
+    chart: {
+      id: 'basic-bar',
+      toolbar: {
+        show: false,
       },
-      {
-        label: 'Second dataset',
-        data: [33, 25, 35, 51, 54, 76],
-        fill: false,
-        borderColor: '#742774',
-        tension: 0.4,
-        borderWidth: 2,
-        drawActiveElementsOnTop: false,
-      },
-    ],
+    },
+    xaxis: {
+      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    dataLabels: {
+      enabled: false,
+    },
   };
+  const series = [
+    {
+      name: 'BCA',
+      data: [30, 40, 45, 50, 49, 60, 70, 91],
+    },
+    {
+      name: 'FLAZZ',
+      data: [85, 53, 45, 32, 34, 52, 41, 50],
+    },
+  ];
 
   const handleChange = (event) => {
     setCurrency(event.target.value);
@@ -95,9 +97,7 @@ export default function Wallet() {
         </Typography>
       </Box>
 
-      <Box>
-        <Line data={data} />
-      </Box>
+      <Chart options={options} series={series} type="area" />
 
       {wallets.data?.map((wallet) => {
         return (
@@ -106,21 +106,35 @@ export default function Wallet() {
               sx={{
                 width: '100%',
                 bgcolor: 'background.paper',
+                px: 2,
               }}
             >
-              <ListItemButton sx={{ px: 2, boxShadow: 1 }}>
+              <ListItemButton
+                sx={{
+                  px: 2,
+                  py: 1,
+                  boxShadow: 1,
+                  borderRadius: 1,
+                }}
+              >
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: brown[400] }}>
+                  <Avatar sx={{ bgcolor: lightBlue[400] }}>
                     <CreditCardIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={wallet.name}
-                  secondary={wallet.initial_balance}
-                />
-                <Typography variant="subtitle2">
-                  {Moment(wallet.created_at).format('DD-MM-YYYY')}
-                </Typography>
+                <Box sx={{ px: 2, width: 'auto' }}>
+                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>
+                    {wallet.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: 15, fontWeight: 'medium' }}>
+                    {wallet.initial_balance.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 'auto' }}>
+                  <Typography variant="caption" sx={{ left: 0 }}>
+                    {Moment(wallet.created_at).format('DD-MM-YYYY')}
+                  </Typography>
+                </Box>
               </ListItemButton>
             </List>
           </React.Fragment>
@@ -136,14 +150,23 @@ export default function Wallet() {
           Add new wallet
         </Button>
       </Stack>
-      <Box maxWidth="sm">
+      <Box>
         <Drawer
-          sx={{ maxWidth: 500, margin: '0 auto' }}
+          sx={{ alignItems: 'center' }}
           anchor="bottom"
           open={open}
           onClose={handleClose}
         >
-          <Box sx={{ py: 4, px: 3 }} role="presentation">
+          <Box
+            role="presentation"
+            sx={{
+              py: 4,
+              px: 2,
+              width: 500,
+              maxWidth: '100%',
+              margin: '0 auto',
+            }}
+          >
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Add new wallet
             </Typography>
@@ -167,7 +190,7 @@ export default function Wallet() {
                 value={currency}
                 onChange={handleChange}
                 variant="standard"
-                {...register('currency_id')}
+                // {...register('currency_id')}
                 sx={{ mb: 2 }}
               >
                 {currencies.map((option) => (
@@ -180,6 +203,7 @@ export default function Wallet() {
               <TextField
                 sx={{ mb: 2 }}
                 id="standard-number"
+                type="number"
                 label="Initial Balance"
                 fullWidth
                 name="initial_balance"
