@@ -1,68 +1,39 @@
-import Moment from 'moment';
+import { useBudget } from '../../libs/hooks/budget';
+import React from 'react';
 import {
-  Avatar,
+  Box,
   Button,
+  Divider,
   Drawer,
+  Grid,
+  LinearProgress,
   List,
-  ListItemAvatar,
   ListItemButton,
   MenuItem,
-  Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
+
 import AddIcon from '@mui/icons-material/Add';
 
-import { useWallet } from '../../libs/hooks/wallet';
-import React from 'react';
-import { Box } from '@mui/system';
+import { blue, grey } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
-import { lightBlue } from '@mui/material/colors';
-import Chart from 'react-apexcharts';
+import { Stack } from '@mui/system';
 import { useCurrency } from '../../libs/hooks/currency';
 
-export default function Wallet() {
+export default function Budget() {
   const { handleSubmit, register } = useForm();
 
-  const { data: wallets, onAdd, loading } = useWallet();
-  const { data: currencies } = useCurrency();
-
   const [open, setOpen] = React.useState(false);
-
   const [currency, setCurrency] = React.useState(1);
 
-  const options = {
-    chart: {
-      id: 'basic-bar',
-      toolbar: {
-        show: false,
-      },
-    },
-    xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-    },
-    stroke: {
-      curve: 'smooth',
-    },
-    dataLabels: {
-      enabled: false,
-    },
-  };
-  const series = [
-    {
-      name: 'BCA',
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
-    },
-    {
-      name: 'FLAZZ',
-      data: [85, 53, 45, 32, 34, 52, 41, 50],
-    },
-  ];
+  const { data: budgets, onAdd, loading } = useBudget();
 
   const handleChange = (event) => {
     setCurrency(event.target.value);
   };
+
+  const { data: currencies } = useCurrency();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -71,58 +42,83 @@ export default function Wallet() {
     setOpen(false);
     onAdd(data);
   };
-
   return (
     <React.Fragment>
       <Box sx={{ mt: 5, px: 2 }}>
-        <Typography variant="h3" gutterBottom component="div">
-          Wallets
+        <Typography variant="h5" align="center" gutterBottom component="div">
+          Budgets
         </Typography>
       </Box>
-
-      <Chart options={options} series={series} type="area" />
-
-      {wallets.data?.map((wallet) => {
-        return (
-          <React.Fragment>
-            <List
-              sx={{
-                width: '100%',
-                bgcolor: 'background.paper',
-                px: 2,
-              }}
-            >
-              <ListItemButton
-                sx={{
-                  px: 2,
-                  py: 1,
-                  boxShadow: 1,
-                  borderRadius: 1,
-                }}
-              >
-                <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: lightBlue[400] }}>
-                    <CreditCardIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <Box sx={{ px: 2, width: 'auto' }}>
-                  <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>
-                    {wallet.name}
-                  </Typography>
-                  <Typography sx={{ fontSize: 15, fontWeight: 'medium' }}>
-                    {wallet.initial_balance.toLocaleString()}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto' }}>
-                  <Typography variant="caption" sx={{ left: 0 }}>
-                    {Moment(wallet.created_at).format('DD-MM-YYYY')}
-                  </Typography>
-                </Box>
-              </ListItemButton>
-            </List>
-          </React.Fragment>
-        );
-      })}
+      <Divider></Divider>
+      <Box sx={{ width: '100%', mt: 2 }}>
+        {budgets.data
+          ? budgets.data.map((budget) => {
+              return (
+                <React.Fragment>
+                  <List
+                    sx={{
+                      width: '100%',
+                      bgcolor: 'background.paper',
+                      py: 0,
+                    }}
+                  >
+                    <ListItemButton>
+                      <Grid container spacing={2}>
+                        <Grid item xs={7}>
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              fontWeight: 'bold',
+                              color: grey[800],
+                            }}
+                          >
+                            {budget.name}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: 15,
+                              fontWeight: 'medium',
+                              color: blue[700],
+                            }}
+                          >
+                            {budget.amount.toLocaleString()}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={5}>
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              left: 0,
+                              textAlign: 'right',
+                              mr: 2,
+                              mt: 2.4,
+                              color: grey[700],
+                            }}
+                          >
+                            Left out: {budget.left_out.toLocaleString()}
+                          </Typography>
+                        </Grid>
+                        <LinearProgress
+                          sx={{
+                            height: 15,
+                            borderRadius: 1,
+                            mx: 2,
+                            my: 1,
+                            width: '100%',
+                            float: 'left',
+                          }}
+                          variant="determinate"
+                          value={budget.progress}
+                        />
+                      </Grid>
+                    </ListItemButton>
+                  </List>
+                  <Divider></Divider>
+                </React.Fragment>
+              );
+            })
+          : null}
+      </Box>
       <Stack spacing={2} direction="row">
         <Button
           variant="outlined"
@@ -130,7 +126,7 @@ export default function Wallet() {
           onClick={handleOpen}
           startIcon={<AddIcon />}
         >
-          Add new wallet
+          Add new budget
         </Button>
       </Stack>
       <Box>
@@ -173,15 +169,14 @@ export default function Wallet() {
                 value={currency}
                 onChange={handleChange}
                 variant="standard"
-                defaultValue=""
                 inputProps={register('currency_id', {
                   required: 'Please enter currency',
                 })}
                 sx={{ mb: 2 }}
               >
-                {currencies.data?.map((curr) => (
-                  <MenuItem key={curr.id} value={curr.id}>
-                    {curr.name}
+                {currencies.data?.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.name}
                   </MenuItem>
                 ))}
               </TextField>

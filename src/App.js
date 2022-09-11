@@ -19,6 +19,7 @@ import { GuestOnly, Protector } from './components';
 import Auth from './pages/auth';
 import Profile from './pages/profile';
 import Wallet from './pages/wallets';
+import Budget from './pages/budget';
 
 function App() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ function App() {
             <Route element={<Protector />}>
               <Route path="/wallets" element={<Wallet />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/budgets" element={<Budget />} />
             </Route>
             <Route element={<GuestOnly />}>
               <Route path="auth" element={<Auth />} />
