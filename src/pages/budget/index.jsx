@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Box,
   Button,
+  Chip,
   Divider,
   Drawer,
   Grid,
@@ -20,6 +21,7 @@ import { blue, grey } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import { Stack } from '@mui/system';
 import { useCurrency } from '../../libs/hooks/currency';
+import { useWallet } from '../../libs/hooks/wallet';
 
 export default function Budget() {
   const { handleSubmit, register } = useForm();
@@ -28,6 +30,7 @@ export default function Budget() {
   const [currency, setCurrency] = React.useState(1);
 
   const { data: budgets, onAdd, loading } = useBudget();
+  const { data: wallets } = useWallet();
 
   const handleChange = (event) => {
     setCurrency(event.target.value);
@@ -147,7 +150,7 @@ export default function Budget() {
             }}
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Add new wallet
+              Add new budget
             </Typography>
             <div></div>
             <Box component="form" noValidate autoComplete="off">
@@ -192,6 +195,41 @@ export default function Budget() {
                 defaultValue="0"
                 {...register('initial_balance')}
               />
+              <Box>
+                <TextField
+                  id="standard-select-currency"
+                  select
+                  fullWidth
+                  label="Wallet"
+                  value="Select wallets"
+                  variant="standard"
+                  inputProps={register('currency_id', {
+                    required: 'Please enter currency',
+                  })}
+                  sx={{ mb: 2 }}
+                >
+                  {wallets.data?.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <Chip
+                  label="Clickable Deletable"
+                  // onClick={handleClick}
+                  // onDelete={handleDelete}
+                />
+                <Chip
+                  label="Clickable Deletable"
+                  // onClick={handleClick}
+                  // onDelete={handleDelete}
+                />
+                <Chip
+                  label="Clickable Deletable"
+                  // onClick={handleClick}
+                  // onDelete={handleDelete}
+                />
+              </Box>
               <div></div>
               <Box sx={{ '& button': { mt: 1, mb: 1 } }}>
                 {loading ? (
