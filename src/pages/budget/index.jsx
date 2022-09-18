@@ -18,13 +18,13 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 
 import { blue, grey } from '@mui/material/colors';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { Stack } from '@mui/system';
 import { useCurrency } from '../../libs/hooks/currency';
 import { useWallet } from '../../libs/hooks/wallet';
 
 export default function Budget() {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, control } = useForm();
 
   const [open, setOpen] = React.useState(false);
   const [currency, setCurrency] = React.useState(1);
@@ -32,8 +32,22 @@ export default function Budget() {
   const { data: budgets, onAdd, loading } = useBudget();
   const { data: wallets } = useWallet();
 
+  const [wallet, setWallet] = React.useState(1);
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+    {
+      control,
+      name: 'wallets',
+    }
+  );
+
   const handleChange = (event) => {
     setCurrency(event.target.value);
+  };
+
+  const handleSelectWallet = (event) => {
+    setWallet(event.target.value);
+    append({ value: event.target.value });
   };
 
   const { data: currencies } = useCurrency();
@@ -45,6 +59,7 @@ export default function Budget() {
     setOpen(false);
     onAdd(data);
   };
+
   return (
     <React.Fragment>
       <Box sx={{ mt: 5, px: 2 }}>
@@ -201,11 +216,12 @@ export default function Budget() {
                   select
                   fullWidth
                   label="Wallet"
-                  value="Select wallets"
+                  value={currency}
                   variant="standard"
                   inputProps={register('currency_id', {
                     required: 'Please enter currency',
                   })}
+                  onChange={handleSelectWallet}
                   sx={{ mb: 2 }}
                 >
                   {wallets.data?.map((option) => (
@@ -214,21 +230,18 @@ export default function Budget() {
                     </MenuItem>
                   ))}
                 </TextField>
-                <Chip
-                  label="Clickable Deletable"
-                  // onClick={handleClick}
-                  // onDelete={handleDelete}
-                />
-                <Chip
-                  label="Clickable Deletable"
-                  // onClick={handleClick}
-                  // onDelete={handleDelete}
-                />
-                <Chip
-                  label="Clickable Deletable"
-                  // onClick={handleClick}
-                  // onDelete={handleDelete}
-                />
+                {fields.map((field, index) => (
+                  <React.Fragment>
+                    {console.log(field)}
+                    <Chip
+                      key={field.id}
+                      label={field.value}
+                      {...register(`wallets.${index}.value`)}
+                      // onClick={handleClick}
+                      // onDelete={handleDelete}
+                    />
+                  </React.Fragment>
+                ))}
               </Box>
               <div></div>
               <Box sx={{ '& button': { mt: 1, mb: 1 } }}>
